@@ -28,7 +28,7 @@ const displayCategoryData = (trees) => {
             const btnDiv = document.createElement("div");
             btnDiv.innerHTML = `<div class="bg-white p-6 rounded shadow">
                 <img src="${tree.image}" alt="${tree.name}" class="w-full h-40 object-cover rounded mb-3">
-                <h3 class="font-semibold mb-1">${tree.name}</h3>
+                <h3 onclick="word_modal.showModal()" class="font-semibold mb-1">${tree.name}</h3>
                 <p class="text-sm text-gray-600 mb-2 line-clamp-3">
                     ${tree.description}
                 </p>
@@ -59,7 +59,7 @@ const displayAllTrees = (trees) => {
             const btnDiv = document.createElement("div");
             btnDiv.innerHTML = `<div class="bg-white p-6 rounded shadow">
                 <img src="${tree.image}" alt="${tree.name}" class="w-full h-40 object-cover rounded mb-3">
-                <h3 class="font-semibold mb-1">${tree.name}</h3>
+                <h3 onclick="loadDetailsTree(${tree.id})" class="font-semibold mb-1">${tree.name}</h3>
                 <p class="text-sm text-gray-600 mb-2 line-clamp-3">
                     ${tree.description}
                 </p>
@@ -71,6 +71,21 @@ const displayAllTrees = (trees) => {
             </div>`;
             treeContainer.appendChild(btnDiv);
       });
+}
+
+const loadDetailsTree = async (id) => {
+    const url = `https://openapi.programming-hero.com/api/plant/${id}`;
+    console.log(url);
+    const res = await fetch(url);
+    const details = await res.json();
+    showDetailsTree(details);
+}
+
+const showDetailsTree = (details) => {
+    console.log(details);
+    const detailsBox = document.getElementById("details-container");
+    detailsBox.innerHTML = "Hello from Earth";
+    document.getElementById("word_modal").showModal();
 }
 
 let cart = [];
