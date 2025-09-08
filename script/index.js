@@ -9,7 +9,7 @@ const displayTreeCategories = (categories) => {
      levelTrees.innerHTML = "";
      categories.forEach((category) => {
          const li = document.createElement("li");
-         li.innerHTML = `<button class="w-[250px] text-left px-3 py-1 hover:bg-green-100 rounded" onclick="fetchCategoryData('${category.id}')">${category.category_name}</button>`;
+         li.innerHTML = `<button class="w-[250px] text-left px-3 py-1 hover:bg-green-500 rounded" onclick="fetchCategoryData('${category.id}')">${category.category_name}</button>`;
          levelTrees.appendChild(li);
      });
      MarkIsActiveCategory();
@@ -35,6 +35,7 @@ const MarkIsActiveCategory = () => {
 }
 
 const fetchCategoryData = (categoryId) => {
+      manageSpinner(true);
       const url = `https://openapi.programming-hero.com/api/category/${categoryId}`;
       fetch(url)
         .then((res) => res.json())
@@ -60,9 +61,12 @@ const displayCategoryData = (trees) => {
             </div>`;
             treeContainer.appendChild(btnDiv);
       });
+      manageSpinner(false);
 }
+
 let allTreesData = [];
 const allTrees = () => {
+     manageSpinner(true);
      const url = `https://openapi.programming-hero.com/api/plants`;
      fetch(url)
        .then((res) => res.json())
@@ -91,6 +95,7 @@ const displayAllTrees = (trees) => {
             </div>`;
             treeContainer.appendChild(btnDiv);
       });
+      manageSpinner(false);
 }
 
 const loadDetailsTree = async (id) => {
@@ -101,7 +106,6 @@ const loadDetailsTree = async (id) => {
 }
 
 const showDetailsTree = (details) => {
-    console.log(details);
     const detailsBox = document.getElementById("details-container");
     detailsBox.innerHTML = `<h1 class="font-semibold text-[20px]"> ${details.name} </h1>
         <img class="w-full h-[300px] object-cover" src="${details.image}" alt="hero image" />
@@ -179,6 +183,18 @@ const removeFromCart = (id) => {
     cart = cart.filter(item => item.id != id);
     displayCart(); // Re-render cart
 };
+
+const manageSpinner = (isLoading) => {
+    if(isLoading === true) {
+        document.getElementById("loading").classList.remove("hidden");
+        document.getElementById("tree-container").classList.add("hidden");
+    }
+    else {
+        document.getElementById("loading").classList.add("hidden");
+        document.getElementById("tree-container").classList.remove("hidden");
+    }
+    
+}
 
 allTrees();
 loadTreeCategories();
