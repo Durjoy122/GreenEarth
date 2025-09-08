@@ -68,7 +68,7 @@
           <div class="w-full md:w-1/5">
               <h1 class="ml-[20px] text-lg font-semibold mb-4">Categories</h1>
               <ul class="ml-[20px] space-y-2">
-                <li><button onclick="allTrees()" class="w-[250px] text-left px-3 py-1 bg-green-700 text-white rounded">All Trees</button></li>
+                <li><button id="all-trees-btn" onclick="allTrees()" class="w-[250px] text-left px-3 py-1 bg-green-700 text-white rounded">All Trees</button></li>
                 <div id="tree-categories">
                   <!-- Dynamic categories will be loaded here -->
                 </div>
@@ -177,8 +177,8 @@
     </footer>
     <dialog id="word_modal" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
-          <div id ="details-container" class="space-y-5">
-              
+          <div id ="details-container" class="space-y-2">
+            <!-- Dynamic details will be loaded here -->
           </div>
 
           <div class="modal-action">

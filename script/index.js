@@ -12,7 +12,27 @@ const displayTreeCategories = (categories) => {
          li.innerHTML = `<button class="w-[250px] text-left px-3 py-1 hover:bg-green-100 rounded" onclick="fetchCategoryData('${category.id}')">${category.category_name}</button>`;
          levelTrees.appendChild(li);
      });
+     MarkIsActiveCategory();
 };
+
+const MarkIsActiveCategory = () => {
+     document.querySelectorAll("#tree-categories button").forEach(button => {
+        button.addEventListener("click", function () {
+            document.querySelectorAll("#tree-categories button, #all-trees-btn").forEach(btn => {
+                btn.classList.remove("bg-green-700", "text-white");
+            });
+            this.classList.add("bg-green-700", "text-white");
+        });
+     });
+
+    const allTreesBtn = document.getElementById("all-trees-btn");
+    allTreesBtn.addEventListener("click", function () {
+        document.querySelectorAll("#tree-categories button, #all-trees-btn").forEach(btn => {
+            btn.classList.remove("bg-green-700", "text-white");
+        });
+        this.classList.add("bg-green-700", "text-white");
+    });
+}
 
 const fetchCategoryData = (categoryId) => {
       const url = `https://openapi.programming-hero.com/api/category/${categoryId}`;
@@ -26,9 +46,9 @@ const displayCategoryData = (trees) => {
       treeContainer.innerHTML = "";
       trees.forEach((tree) => {
             const btnDiv = document.createElement("div");
-            btnDiv.innerHTML = `<div class="bg-white p-6 rounded shadow">
+            btnDiv.innerHTML = `<div class="bg-white p-6 rounded shadow  hover:shadow-xl hover:scale-105 hover:bg-green-100 transition-all duration-300">
                 <img src="${tree.image}" alt="${tree.name}" class="w-full h-40 object-cover rounded mb-3">
-                <h3 onclick="word_modal.showModal()" class="font-semibold mb-1">${tree.name}</h3>
+                <h3 onclick="loadDetailsTree(${tree.id})" class="font-semibold mb-1">${tree.name}</h3>
                 <p class="text-sm text-gray-600 mb-2 line-clamp-3">
                     ${tree.description}
                 </p>
@@ -57,7 +77,7 @@ const displayAllTrees = (trees) => {
       treeContainer.innerHTML = "";
       trees.forEach((tree) => {
             const btnDiv = document.createElement("div");
-            btnDiv.innerHTML = `<div class="bg-white p-6 rounded shadow">
+            btnDiv.innerHTML = `<div class="bg-white p-6 rounded shadow  hover:shadow-xl hover:scale-105 hover:bg-green-100 transition-all duration-300">
                 <img src="${tree.image}" alt="${tree.name}" class="w-full h-40 object-cover rounded mb-3">
                 <h3 onclick="loadDetailsTree(${tree.id})" class="font-semibold mb-1">${tree.name}</h3>
                 <p class="text-sm text-gray-600 mb-2 line-clamp-3">
@@ -75,17 +95,29 @@ const displayAllTrees = (trees) => {
 
 const loadDetailsTree = async (id) => {
     const url = `https://openapi.programming-hero.com/api/plant/${id}`;
-    console.log(url);
     const res = await fetch(url);
     const details = await res.json();
-    showDetailsTree(details);
+    showDetailsTree(details.plants);
 }
 
 const showDetailsTree = (details) => {
     console.log(details);
     const detailsBox = document.getElementById("details-container");
-    detailsBox.innerHTML = "Hello from Earth";
-    document.getElementById("word_modal").showModal();
+    detailsBox.innerHTML = `<h1 class="font-semibold text-[20px]"> ${details.name} </h1>
+        <img class="w-full h-[300px] object-cover" src="${details.image}" alt="hero image" />
+        <p>
+           <span class="font-semibold">Category :</span>
+           <span class="font-sans">${details.category}</span>
+        </p>
+        <p>
+            <span class="font-semibold">Price :</span>
+            <span class="font-sans">৳${details.price}</span>
+        </p>
+        <p>
+            <span class="font-semibold">Description :</span>
+            <span class="font-sans text-[14px]">${details.description}</span>
+        </p>`;
+        document.getElementById("word_modal").showModal();
 }
 
 let cart = [];
@@ -98,7 +130,7 @@ const addToCart = (id) => {
     }
     const existingItem = cart.find((item) => item.id === treeId);
     if(existingItem) {
-        existingItem.quantity += 1; // increase quantity
+        existingItem.quantity += 1; 
     }
     else {
         cart.push({ ...tree, quantity: 1 });
@@ -108,7 +140,7 @@ const addToCart = (id) => {
 
 const displayCart = () => {
     const cartItemsContainer = document.getElementById("cart-items");
-    cartItemsContainer.innerHTML = ""; // Clear previous items
+    cartItemsContainer.innerHTML = ""; 
 
       if(cart.length === 0) {
           cartItemsContainer.innerHTML = `<p class="text-sm text-gray-500">Your cart is empty.</p>`;
@@ -148,6 +180,8 @@ const removeFromCart = (id) => {
     cart = cart.filter(item => item.id != id); // Remove item by id
     displayCart(); // Re-render cart
 };
+
+
 
 allTrees();
 loadTreeCategories();
