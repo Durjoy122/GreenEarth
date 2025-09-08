@@ -166,7 +166,6 @@ const displayCart = () => {
            cartItemsContainer.appendChild(itemDiv);
       });
 
-    // Display total
       const totalDiv = document.createElement("div");
       totalDiv.className = "mt-4 flex justify-between font-semibold";
       totalDiv.innerHTML = `
@@ -177,11 +176,9 @@ const displayCart = () => {
 };
 
 const removeFromCart = (id) => {
-    cart = cart.filter(item => item.id != id); // Remove item by id
+    cart = cart.filter(item => item.id != id);
     displayCart(); // Re-render cart
 };
-
-
 
 allTrees();
 loadTreeCategories();
